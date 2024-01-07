@@ -1,24 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wisesplit/services/auth_service.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-  final user = FirebaseAuth.instance.currentUser;
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: const Center(
         child: Text(
-          "You logged in As: ${user?.email}",
+          "You logged in",
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: signOut,
-        child: Icon(Icons.logout),
+        onPressed: () {AuthService().signOut();},
+        child: const Icon(Icons.logout),
       ),
     );
   }

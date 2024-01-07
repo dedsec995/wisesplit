@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wisesplit/model/user.dart';
+import 'package:wisesplit/utils/show_snack_bar.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
+import "package:wisesplit/services/auth_service.dart";
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
 
-  LoginPage({super.key,required this.onTap});
+  LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,19 +31,13 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         });
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      //wrong Email
-      showmessage(e.code);
+    UserModel? user = await AuthService().signInUser(_emailController.text.trim(), _passwordController.text.trim());
+    if(user != null){
+      showSnackBar(context, 'Welcome ${user.email}');  
     }
+    Navigator.pop(context);
   }
 
   @override

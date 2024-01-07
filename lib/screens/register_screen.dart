@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wisesplit/model/user.dart';
+import 'package:wisesplit/services/auth_service.dart';
+import 'package:wisesplit/utils/show_snack_bar.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
 import '../widgets/square_tile.dart';
@@ -38,16 +40,12 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (context) {
           return Center(child: CircularProgressIndicator());
         });
-
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      //wrong Email
-      showmessage(e.code);
+    UserModel? user = await AuthService().signUpUser(
+        _emailController.text.trim(), _passwordController.text.trim());
+    if (user != null) {
+      showSnackBar(context, 'Welcome ${user.email}');
     }
+    Navigator.pop(context);
   }
 
   @override
@@ -89,7 +87,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Confirm Password',
                 obscureText: true,
               ),
-
               const SizedBox(height: 25),
               MyButton(
                 text: "Sign Up",
@@ -103,18 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Color(0xFF707070)),
               ),
-              const SizedBox(height: 10),
-              const Divider(),
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SquareTile(imagePath: 'lib/images/google.png'),
-                  SizedBox(width: 25),
-                  SquareTile(imagePath: 'lib/images/apple.png'),
-                ],
-              ),
-              const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
