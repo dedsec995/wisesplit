@@ -1,11 +1,12 @@
-import 'package:wisesplit/screens/home_screen.dart';
-import 'package:wisesplit/screens/sign_up.dart';
+import 'package:wisesplit/screens/login_register_toggle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AuthenticationFlowScreen extends StatelessWidget {
-  const AuthenticationFlowScreen({super.key});
-  static String id = 'main screen';
+import 'home_page.dart';
+
+class AuthPage extends StatelessWidget {
+  const AuthPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,9 +14,9 @@ class AuthenticationFlowScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomeScreen();
+            return HomePage();
           } else {
-            return const SignupScreen();
+            return LoginOrRegister();
           }
         },
       ),
