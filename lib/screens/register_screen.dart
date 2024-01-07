@@ -4,7 +4,6 @@ import 'package:wisesplit/services/auth_service.dart';
 import 'package:wisesplit/utils/show_snack_bar.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
-import '../widgets/square_tile.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -16,9 +15,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController =TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   void showmessage(String errorMessage) {
@@ -40,10 +39,10 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (context) {
           return Center(child: CircularProgressIndicator());
         });
-    UserModel? user = await AuthService().signUpUser(
+    UserModel? user = await AuthService().signUpUser(_usernameController.text.trim(),
         _emailController.text.trim(), _passwordController.text.trim());
     if (user != null) {
-      showSnackBar(context, 'Welcome ${user.email}');
+      showSnackBar(context, 'Welcome ${user.displayName}');
     }
     Navigator.pop(context);
   }
@@ -71,8 +70,14 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 20),
               MyTextField(
-                controller: _emailController,
+                controller: _usernameController,
                 hintText: 'Username',
+                obscureText: false,
+              ),
+              const SizedBox(height: 10),
+              MyTextField(
+                controller: _emailController,
+                hintText: 'email',
                 obscureText: false,
               ),
               const SizedBox(height: 10),

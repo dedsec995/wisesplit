@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wisesplit/model/user.dart';
 import 'package:wisesplit/utils/show_snack_bar.dart';
@@ -35,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
         });
     UserModel? user = await AuthService().signInUser(_emailController.text.trim(), _passwordController.text.trim());
     if(user != null){
-      showSnackBar(context, 'Welcome ${user.email}');  
+      showSnackBar(context, 'Welcome ${user.displayName}');  
     }
     Navigator.pop(context);
   }
